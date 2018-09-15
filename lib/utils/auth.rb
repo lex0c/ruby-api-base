@@ -8,7 +8,11 @@ module Utils
     end
 
     def self.decode token
-      JWT.decode token, ENV['API_KEY'], true, { algorithm: 'HS256' }
+      begin
+        JWT.decode token.split(' ')[1], ENV['API_KEY'], true, { algorithm: 'HS256' }
+      rescue => e
+        raise ArgumentError.new 'Invalid token'
+      end
     end
 
     def self.get_current_user token
