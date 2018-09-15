@@ -1,6 +1,6 @@
 require 'jwt'
 
-module Config
+module Utils
   class Auth
 
     def self.encode payload

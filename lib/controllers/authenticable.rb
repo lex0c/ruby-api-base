@@ -12,19 +12,40 @@ module Controller
     before do
       begin
         token = request.headers['Authorization'].split ' '
-        @@current_user = Config::Auth::get_current_user token[1]
+        @@current_user = Utils::Auth::get_current_user token[1]
         puts @@current_user
       rescue => e
-        error!({ error: 'unauthorized' }, 403)
+        error!({ error: 'unauthorized' }, 401)
       end
     end
 
     post '/auth' do
       content_type 'application/json'
-      { user: @@current_user }
+      status 200
+
+      begin
+
+        # ...
+
+      rescue => e
+        error!({ error: e }, 400)
+      end
+
+      { data: @@current_user }
     end
 
-    # ...
+    get '/user' do
+      content_type 'application/json'
+      status 200
+
+      begin
+        { data: @@current_user }
+      rescue => e
+        error!({ error: e.message }, e.status)
+      end
+
+    end
+
 
   end
 end
